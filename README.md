@@ -18,11 +18,11 @@ Install [BRAT](https://github.com/TfTHacker/obsidian42-brat), add `lucapericlp/m
 
 ### Manual installation
 
-1. Download `marginalia-md-0.3.2.zip` from the [latest release](https://github.com/lucapericlp/marginalia-md/releases/latest).
-2. Extract its `marginalia-md` folder into your vault's plugin directory, normally `<vault>/.obsidian/plugins/`.
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/lucapericlp/marginalia-md/releases/latest).
+2. Create `<vault>/.obsidian/plugins/marginalia-md/` and put the three files inside it.
 3. Enable **Marginalia MD** under **Settings → Community plugins**. Reload the plugin after replacing an existing installation.
 
-The release also provides `main.js`, `manifest.json`, and `styles.css` separately for Obsidian's installer. Saved comments live in your notes and survive updates. Community directory submission instructions are [here](docs/community-submission.md).
+Releases contain only the three assets used by Obsidian's installer, with GitHub build-provenance attestations. An optional manual-install ZIP is available in the release workflow's artifacts, or can be built locally with `npm run package`. Saved comments live in your notes and survive updates. Community directory submission instructions are [here](docs/community-submission.md).
 
 ### Upgrading the previous private build
 
@@ -86,12 +86,13 @@ Use Node.js 22.13 or newer.
 ```sh
 npm ci
 npm run lint
+npm run lint:css
 npm test
 npm run build
 npm run install:vault -- /absolute/path/to/a/test-vault
 ```
 
-`npm run package` creates the Community Plugins assets, manual-install ZIP, licenses, and checksums in `dist/<version>/`. The build bundles runtime dependencies while leaving Obsidian and CodeMirror external. GitHub Actions validates changes and publishes releases from version tags without a `v` prefix. See [CONTRIBUTING.md](CONTRIBUTING.md) for the release process and [CHANGELOG.md](CHANGELOG.md) for changes.
+`npm run package` creates the Community Plugins assets, manual-install ZIP, licenses, and checksums in `dist/<version>/`. `npm run build` produces the same production output as releases; use `npm run build:dev` for source maps. The build bundles runtime dependencies while leaving Obsidian and CodeMirror external. GitHub Actions validates changes and publishes releases from version tags without a `v` prefix. See [CONTRIBUTING.md](CONTRIBUTING.md) for the release process and [CHANGELOG.md](CHANGELOG.md) for changes.
 
 The automated suite covers source preservation, selection mapping, formatting boundaries, conflicting edits, ambiguous anchors, native undo, and preservation of theme typography.
 

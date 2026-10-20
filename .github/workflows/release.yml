@@ -16,41 +16,54 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
+      attestations: write
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - run: npm run lint:css
       - run: npm test
       - run: npm run package
+      - run: npm run check:build
       - run: npm run check:release -- "$RELEASE_TAG"
         env:
           RELEASE_TAG: ${{ github.ref_name }}
       - run: git diff --exit-code THIRD_PARTY_NOTICES.md
       - run: npm audit --omit=dev
+      - name: Attest plugin assets
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        with:
+          subject-path: |
+            dist/${{ github.ref_name }}/main.js
+            dist/${{ github.ref_name }}/manifest.json
+            dist/${{ github.ref_name }}/styles.css
+      - name: Store optional manual-install package
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: marginalia-md-${{ github.ref_name }}-manual
+          path: |
+            dist/${{ github.ref_name }}/*.zip
+            dist/${{ github.ref_name }}/SHA256SUMS.txt
+            dist/${{ github.ref_name }}/LICENSE
+            dist/${{ github.ref_name }}/THIRD_PARTY_NOTICES.md
+          retention-days: 90
       - name: Publish Community Plugins assets
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          plugin_id=$(node -p 'require("./manifest.json").id')
           plugin_name=$(node -p 'require("./manifest.json").name')
-          notes="docs/releases/$RELEASE_TAG.md"
-          if [ -f "$notes" ]; then
-            args=(--notes-file "$notes")
-          else
-            args=(--generate-notes)
-          fi
+          notes="$RUNNER_TEMP/release-notes.md"
+          cp "docs/releases/$RELEASE_TAG.md" "$notes"
+          printf '\nOptional manual-install ZIP and checksums: [workflow artifacts](https://github.com/%s/actions/runs/%s).\n' "$GH_REPO" "$GITHUB_RUN_ID" >> "$notes"
           gh release create "$RELEASE_TAG" \
             "dist/$RELEASE_TAG/main.js" \
             "dist/$RELEASE_TAG/manifest.json" \
             "dist/$RELEASE_TAG/styles.css" \
-            "dist/$RELEASE_TAG/LICENSE" \
-            "dist/$RELEASE_TAG/THIRD_PARTY_NOTICES.md" \
-            "dist/$RELEASE_TAG/$plugin_id-$RELEASE_TAG.zip" \
-            "dist/$RELEASE_TAG/SHA256SUMS.txt" \
-            --verify-tag --title "$plugin_name $RELEASE_TAG" "${args[@]}"
+            --verify-tag --title "$plugin_name $RELEASE_TAG" --notes-file "$notes"

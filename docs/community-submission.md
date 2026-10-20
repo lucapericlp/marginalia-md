@@ -8,11 +8,11 @@ The repository and GitHub release are prepared for submission. This document doe
 | Plugin ID | `marginalia-md` |
 | Name | Marginalia MD |
 | Author | Luca Peric |
-| Release tag | `0.3.2` (no `v` prefix) |
+| Release tag | `0.3.3` (no `v` prefix) |
 | Minimum Obsidian version | `1.14.4` |
 | License | MIT |
 
-The release includes separate `main.js`, `manifest.json`, and `styles.css` attachments, as required by Obsidian's installer. The ZIP is for manual installation. `versions.json` maps releases to their minimum supported app version. `main.js` includes the dependency license notices because Obsidian downloads only the three plugin assets.
+The release includes separate `main.js`, `manifest.json`, and `styles.css` attachments, as required by Obsidian's installer. There are no extra release attachments. The optional ZIP is stored separately as a workflow artifact for manual installation. GitHub artifact attestations cover all three installer assets. `versions.json` maps releases to their minimum supported app version. `main.js` includes the dependency license notices because Obsidian downloads only the three plugin assets.
 
 ## Submit through the directory
 
@@ -29,7 +29,7 @@ The account holder must agree to the policies and maintenance commitment. The re
 ## Preparation evidence
 
 - Manifest ID/name were checked against the public plugin list before publication.
-- All 27 automated checks pass, including annotation source preservation, selection mapping, native undo, ambiguous anchors, and theme typography.
+- All 28 automated checks pass, including annotation source preservation, selection mapping, native undo, ambiguous anchors, and theme typography.
 - Obsidian's recommended ESLint rules pass without warnings.
 - Saved notes work in ordinary Markdown and use no proprietary annotation database.
 - No account, payment, telemetry, or plugin-initiated network requests are required.

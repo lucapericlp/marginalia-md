@@ -2,7 +2,7 @@ import { build } from 'esbuild';
 import { readFile, writeFile, rm } from 'node:fs/promises';
 import { bundledNotices } from './scripts/notices.mjs';
 
-const production = process.argv.includes('--production');
+const production = !process.argv.includes('--development');
 const options = {
   entryPoints: ['src/main.ts'],
   bundle: true,

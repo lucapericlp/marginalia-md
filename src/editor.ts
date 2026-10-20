@@ -10,6 +10,7 @@ export interface NativeState {
   model: DocumentModel; enabled: boolean;
   path: string; draft: Draft | null; decorations: DecorationSet; atomic: RangeSet<Decoration>;
 }
+interface MarginWidgetElement extends HTMLElement { mgComponent?: Component; mgPanel?: HTMLElement }
 
 function noteAnchor(model: DocumentModel, note: MarginNote): Anchor {
   return { snapshot: model.markdown, blockFrom: note.block.from, blockTo: note.block.to, scope: note.scope, from: note.range?.from ?? note.block.from, to: note.range?.to ?? note.block.to, quote: note.quote };
@@ -33,11 +34,13 @@ export function createNativeMargins(host: MarginHost) {
       const owner = view.plugin(controller)!;
       if (this.draft) owner.buildComposer(wrapper, this.draft);
       else if (this.note) owner.buildNote(wrapper, this.note);
+      owner.trackPanel(wrapper);
       return wrapper;
     }
     destroy(element: HTMLElement): void {
-      const component = (element as HTMLElement & { mgComponent?: Component }).mgComponent;
-      component?.unload();
+      const widget = element as MarginWidgetElement;
+      widget.mgComponent?.unload();
+      widget.mgPanel?.remove();
     }
     ignoreEvent(): boolean { return true; }
     get estimatedHeight(): number { return 0; }
@@ -100,8 +103,11 @@ export function createNativeMargins(host: MarginHost) {
     private pen: HTMLButtonElement;
     private hover: number | null = null;
     private root: HTMLElement;
+    private rail: HTMLElement;
     constructor(readonly view: EditorView) {
       this.root = view.dom.closest<HTMLElement>('.markdown-source-view') ?? view.dom;
+      // Keep wide margin panels outside CodeMirror's paint-contained block widgets.
+      this.rail = view.scrollDOM.createDiv({ cls: 'mg-native-rail', attr: { 'aria-label': 'Margin notes' } });
       this.selectionButton = this.button(view.scrollDOM, 'Write in the margin about selected text', 'pencil-line', () => {
         const data = view.state.field(field), selection = view.state.selection.main;
         try { this.open(anchorFromSelection(data.model, selection.from, selection.to)); }
@@ -125,6 +131,21 @@ export function createNativeMargins(host: MarginHost) {
       }
       if (update.docChanged || update.selectionSet || update.viewportChanged || update.geometryChanged || update.transactions.some(tr => tr.effects.length)) this.measure();
     }
+    trackPanel(wrapper: MarginWidgetElement): void {
+      const panel = wrapper.firstElementChild as HTMLElement | null;
+      if (!panel) return;
+      wrapper.mgPanel = panel;
+      this.resize.observe(panel);
+      wrapper.mgComponent?.register(() => this.resize.unobserve(panel));
+      this.measure();
+    }
+    private movePanel(panel: HTMLElement, parent: HTMLElement): void {
+      if (panel.parentElement === parent) return;
+      const focused = this.view.dom.ownerDocument.activeElement;
+      const restore = focused?.instanceOf(HTMLElement) && panel.contains(focused) ? focused : null;
+      parent.append(panel);
+      restore?.focus({ preventScroll: true });
+    }
     measure(): void {
       if (this.disposed) return;
       this.view.requestMeasure({
@@ -132,7 +153,7 @@ export function createNativeMargins(host: MarginHost) {
         read: view => {
           const state = view.state.field(field);
           const compact = view.scrollDOM.clientWidth < 820;
-          const widgets = Array.from(view.contentDOM.querySelectorAll<HTMLElement>('.mg-native-note-widget'));
+          const widgets = Array.from(view.contentDOM.querySelectorAll<MarginWidgetElement>('.mg-native-note-widget'));
           const selection = view.state.selection.main, scroll = view.scrollDOM.getBoundingClientRect();
           let selected = false;
           try { if (!selection.empty) { anchorFromSelection(state.model, selection.from, selection.to); selected = true; } } catch { /* More than one paragraph, or syntax rather than prose. */ }
@@ -140,19 +161,20 @@ export function createNativeMargins(host: MarginHost) {
           const hoverCoords = this.hover !== null && !state.draft && selection.empty ? view.coordsAtPos(Math.min(this.hover, view.state.doc.length)) : null;
           const content = view.contentDOM.getBoundingClientRect();
           const items = widgets.map((widget, index) => {
-            const child = widget.firstElementChild as HTMLElement;
+            const child = widget.mgPanel;
             const note = state.model.notes.find(note => note.id === child?.dataset.note);
             const anchor = note?.range?.from ?? note?.block.from ?? (state.draft?.anchor.from ?? 0);
             const coords = view.coordsAtPos(Math.min(anchor, view.state.doc.length));
             const rect = widget.getBoundingClientRect();
             return { id: String(index), widget, child, origin: rect.top - content.top, preferred: (coords?.top ?? rect.top) - content.top, height: child?.offsetHeight ?? 0 };
           });
-          return { enabled: state.enabled, hasMargins: state.model.notes.length > 0 || !!state.draft, compact, items, packed: packMarginNotes(items, 22), selectionCoords, hoverCoords, scroll, content };
+          return { enabled: state.enabled, hasMargins: state.model.notes.length > 0 || !!state.draft, compact, items, packed: packMarginNotes(items, 22), selectionCoords, hoverCoords, scroll, content, rail: this.rail.getBoundingClientRect() };
         },
         write: result => {
           this.root.classList.toggle('mg-native', result.enabled);
           this.root.classList.toggle('mg-has-margins', result.hasMargins);
           this.root.classList.toggle('mg-native-compact', result.compact);
+          this.rail.hidden = result.compact || !result.hasMargins;
           this.selectionButton.hidden = !result.enabled || !result.selectionCoords;
           this.pen.hidden = !result.enabled || !result.hoverCoords;
           if (result.selectionCoords) {
@@ -164,11 +186,18 @@ export function createNativeMargins(host: MarginHost) {
             this.pen.style.top = `${result.hoverCoords.top - result.scroll.top + this.view.scrollDOM.scrollTop}px`;
           }
           if (result.compact) {
-            for (const item of result.items) if (item.child) item.child.style.removeProperty('top');
+            for (const item of result.items) if (item.child) {
+              this.movePanel(item.child, item.widget);
+              item.child.style.removeProperty('top');
+            }
           } else {
+            this.rail.style.left = `${result.content.right - result.scroll.left + this.view.scrollDOM.scrollLeft + 44}px`;
             for (const packed of result.packed) {
               const item = result.items[Number(packed.id)];
-              if (item?.child) item.child.style.top = `${packed.top - item.origin}px`;
+              if (item?.child) {
+                this.movePanel(item.child, this.rail);
+                item.child.style.top = `${packed.top + result.content.top - result.rail.top}px`;
+              }
             }
           }
         },
@@ -276,7 +305,7 @@ export function createNativeMargins(host: MarginHost) {
       const data = this.view.state.field(field);
       if (data.draft) void host.storeDraft(data.path, data.draft);
       this.disposed = true; this.clearDraftTimer(); this.resize.disconnect();
-      this.selectionButton.remove(); this.pen.remove();
+      this.selectionButton.remove(); this.pen.remove(); this.rail.remove();
       this.root.classList.remove('mg-native', 'mg-native-compact', 'mg-has-margins');
     }
   }

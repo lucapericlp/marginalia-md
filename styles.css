@@ -1,4 +1,5 @@
 /* Only annotations have a typographic style. The article remains entirely theme-controlled. */
+
 .mg-native, .mg-reading {
   --mg-paper: var(--background-primary);
   --mg-ink: var(--text-normal);
@@ -6,62 +7,352 @@
   --mg-faint: var(--text-faint);
   --mg-line: var(--background-modifier-border);
   --mg-accent: #b38b4d;
-  --mg-serif: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Palatino, Georgia, serif;
+  --mg-serif: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', palatino, georgia, serif;
   --mg-margin-space: 276px;
 }
-.mg-icon { display: inline-flex; align-items: center; justify-content: center; }
-.mg-icon svg { width: 15px; height: 15px; stroke-width: 1.45; }
-:is(.mg-native, .mg-reading) button.mg-control { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 24px; height: 26px; padding: 3px 5px; border: 0; background: transparent; box-shadow: none; color: var(--mg-pencil); font: 11px/1.3 var(--font-interface); cursor: pointer; }
-:is(.mg-native, .mg-reading) button.mg-control:hover { color: var(--mg-ink); background: var(--background-modifier-hover); }
-:is(.mg-native, .mg-reading) button.mg-control:focus-visible, .mg-note:focus-visible { outline: 1px solid var(--mg-accent); outline-offset: 3px; }
-.mg-note { position: absolute; width: 100%; padding: 0; color: var(--mg-pencil); transition: color .15s; outline: none; }
-.mg-note-meta { display: flex; align-items: center; gap: 7px; height: 22px; margin: 0 0 3px; color: var(--mg-faint); font: 400 9px/1.4 var(--font-interface); }
-.mg-note-number { font-variant-numeric: tabular-nums; letter-spacing: .04em; }
-.mg-scope-symbol { color: var(--mg-accent); font-family: var(--mg-serif); font-size: 13px; }
-.mg-note-body { font: italic 14px/1.62 var(--mg-serif); overflow-wrap: anywhere; user-select: text; -webkit-user-select: text; }
-:is(.mg-native, .mg-reading) .mg-note-body p { font: inherit; color: inherit; margin: 0 0 .6em; }
-:is(.mg-native, .mg-reading) .mg-note-body p:last-child { margin-bottom: 0; }
-.mg-note-body a { color: inherit; text-decoration-color: var(--mg-line); text-underline-offset: 3px; }
-.mg-note-body ul, .mg-note-body ol { padding-left: 17px; margin: 7px 0; }
-.mg-note-body code { font-size: 10px; font-style: normal; }
-:is(.mg-native, .mg-reading) .mg-note .mg-edit-note { margin-left: auto; opacity: 0; }
-:is(.mg-native, .mg-reading) .mg-note:hover .mg-edit-note, :is(.mg-native, .mg-reading) .mg-note:focus-within .mg-edit-note { opacity: 1; }
-.mg-note.mg-engaged { color: var(--mg-ink); }
-.mg-composer { position: absolute; width: 220px; padding: 10px 0; border-top: 1px solid var(--mg-accent); border-bottom: 1px solid var(--mg-line); background: var(--mg-paper); z-index: 5; }
-.mg-composer-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; color: var(--mg-faint); font: 500 8px/1.4 var(--font-interface); letter-spacing: .12em; }
-.mg-composer-quote { font: italic 11px/1.5 var(--mg-serif); color: var(--mg-faint); margin: 8px 0 13px; border-left: 1px solid var(--mg-line); padding-left: 9px; }
-:is(.mg-native, .mg-reading) .mg-composer textarea { display: block; width: 100%; min-height: 100px; border: 0; border-radius: 0; padding: 0; margin: 0; background: transparent; resize: vertical; box-shadow: none; color: var(--mg-ink); font: italic 14px/1.65 var(--mg-serif); }
-.mg-composer textarea::placeholder { color: var(--mg-faint); }
-.mg-composer-footer { display: flex; align-items: center; gap: 7px; margin-top: 12px; }
-.mg-save-hint { flex: 1; color: var(--mg-faint); font: 400 9px/1.5 var(--font-interface); text-align: right; }
-:is(.mg-native, .mg-reading) [hidden], .mg-managed-footnote, .mg-footnotes-empty { display: none !important; }
+
+.mg-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mg-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.45;
+}
+
+:is(.mg-native, .mg-reading) button.mg-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 24px;
+  height: 26px;
+  padding: 3px 5px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--mg-pencil);
+  font: 11px/1.3 var(--font-interface);
+  cursor: pointer;
+}
+
+:is(.mg-native, .mg-reading) button.mg-control:hover {
+  color: var(--mg-ink);
+  background: var(--background-modifier-hover);
+}
+
+:is(.mg-native, .mg-reading) button.mg-control:focus-visible, .mg-note:focus-visible {
+  outline: 1px solid var(--mg-accent);
+  outline-offset: 3px;
+}
+
+.mg-note {
+  position: absolute;
+  width: 100%;
+  padding: 0;
+  color: var(--mg-pencil);
+  transition: color .15s;
+  outline: none;
+}
+
+.mg-note-meta {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 22px;
+  margin: 0 0 3px;
+  color: var(--mg-faint);
+  font: 400 9px/1.4 var(--font-interface);
+}
+
+.mg-note-number {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .04em;
+}
+
+.mg-scope-symbol {
+  color: var(--mg-accent);
+  font-family: var(--mg-serif);
+  font-size: 13px;
+}
+
+.mg-note-body {
+  font: italic 14px/1.62 var(--mg-serif);
+  overflow-wrap: anywhere;
+  user-select: text;
+  user-select: text;
+}
+
+:is(.mg-native, .mg-reading) .mg-note-body p {
+  font: inherit;
+  color: inherit;
+  margin: 0 0 .6em;
+}
+
+:is(.mg-native, .mg-reading) .mg-note-body p:last-child {
+  margin-bottom: 0;
+}
+
+.mg-note-body a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+
+.mg-note-body ul, .mg-note-body ol {
+  padding-left: 17px;
+  margin: 7px 0;
+}
+
+.mg-note-body code {
+  font-size: 10px;
+  font-style: normal;
+}
+
+:is(.mg-native, .mg-reading) .mg-note .mg-edit-note {
+  margin-left: auto;
+  opacity: 0;
+}
+
+:is(.mg-native, .mg-reading) .mg-note:hover .mg-edit-note, :is(.mg-native, .mg-reading) .mg-note:focus-within .mg-edit-note {
+  opacity: 1;
+}
+
+.mg-note.mg-engaged {
+  color: var(--mg-ink);
+}
+
+.mg-composer {
+  position: absolute;
+  width: 220px;
+  padding: 10px 0;
+  border-top: 1px solid var(--mg-accent);
+  border-bottom: 1px solid var(--mg-line);
+  background: var(--mg-paper);
+  z-index: 5;
+}
+
+.mg-composer-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  color: var(--mg-faint);
+  font: 500 8px/1.4 var(--font-interface);
+  letter-spacing: .12em;
+}
+
+.mg-composer-quote {
+  font: italic 11px/1.5 var(--mg-serif);
+  color: var(--mg-faint);
+  margin: 8px 0 13px;
+  border-left: 1px solid var(--mg-line);
+  padding-left: 9px;
+}
+
+:is(.mg-native, .mg-reading) .mg-composer textarea {
+  display: block;
+  width: 100%;
+  min-height: 100px;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  resize: vertical;
+  box-shadow: none;
+  color: var(--mg-ink);
+  font: italic 14px/1.65 var(--mg-serif);
+}
+
+.mg-composer textarea::placeholder {
+  color: var(--mg-faint);
+}
+
+.mg-composer-footer {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.mg-save-hint {
+  flex: 1;
+  color: var(--mg-faint);
+  font: 400 9px/1.5 var(--font-interface);
+  text-align: right;
+}
+
+:is(.mg-native, .mg-reading) .mg-control[hidden], :is(.mg-native, .mg-reading) .mg-note[hidden], :is(.mg-native, .mg-reading) .mg-composer[hidden], .markdown-preview-view.mg-reading .mg-managed-footnote, .markdown-preview-view.mg-reading .mg-footnotes-empty {
+  display: none;
+}
 
 /* A margin is reserved only when it contains a note or an open composer. */
-.mg-native.mg-has-margins:not(.mg-native-compact) .cm-sizer { box-sizing: border-box; padding-right: var(--mg-margin-space) !important; }
-.mg-native.mg-has-margins.is-readable-line-width:not(.mg-native-compact) .cm-sizer { max-width: calc(var(--file-line-width, 700px) + var(--mg-margin-space)) !important; }
-.mg-native.mg-has-margins .cm-content, .mg-native.mg-has-margins .cm-contentContainer { overflow: visible !important; }
-.mg-native .cm-line.mg-native-paragraph, .mg-reading-paragraph { position: relative; }
-.mg-native .cm-line.mg-native-paragraph::before, .mg-reading-paragraph::before { content: ''; position: absolute; left: -16px; top: 0; bottom: 0; width: 5px; border-left: 1px solid var(--mg-accent); opacity: .65; pointer-events: none; }
-.mg-native .cm-line.mg-native-paragraph-first::before, .mg-reading-paragraph::before { top: 5px; border-top: 1px solid var(--mg-accent); }
-.mg-native .cm-line.mg-native-paragraph-last::before, .mg-reading-paragraph::before { bottom: 5px; border-bottom: 1px solid var(--mg-accent); }
-.mg-reading-paragraph.mg-engaged-paragraph::before { opacity: 1; }
-.mg-native .mg-native-passage, .mg-reading mark.mg-reading-passage { background: rgba(217,178,96,.24); color: inherit; border-radius: 1px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-.mg-native .mg-native-passage .cm-highlight { background: transparent; }
-.mg-native .mg-native-passage.mg-engaged, .mg-reading mark.mg-reading-passage.mg-engaged { background: rgba(217,178,96,.42); }
+
+.markdown-source-view.mod-cm6.mg-native.mg-has-margins:not(.mg-native-compact) .cm-sizer {
+  box-sizing: border-box;
+  padding-right: var(--mg-margin-space);
+}
+
+.markdown-source-view.mod-cm6.mg-native.mg-has-margins.is-readable-line-width:not(.mg-native-compact) .cm-sizer {
+  max-width: calc(var(--file-line-width, 700px) + var(--mg-margin-space));
+}
+
+.markdown-source-view.mod-cm6.mg-native.mg-has-margins .cm-content, .markdown-source-view.mod-cm6.mg-native.mg-has-margins .cm-contentContainer {
+  overflow: visible;
+}
+
+.mg-native .cm-line.mg-native-paragraph, .mg-reading-paragraph {
+  position: relative;
+}
+
+.mg-native .cm-line.mg-native-paragraph::before, .mg-reading-paragraph::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  border-left: 1px solid var(--mg-accent);
+  opacity: .65;
+  pointer-events: none;
+}
+
+.mg-native .cm-line.mg-native-paragraph-first::before, .mg-reading-paragraph::before {
+  top: 5px;
+  border-top: 1px solid var(--mg-accent);
+}
+
+.mg-native .cm-line.mg-native-paragraph-last::before, .mg-reading-paragraph::before {
+  bottom: 5px;
+  border-bottom: 1px solid var(--mg-accent);
+}
+
+.mg-reading-paragraph.mg-engaged-paragraph::before {
+  opacity: 1;
+}
+
+.mg-native .mg-native-passage, .mg-reading mark.mg-reading-passage {
+  background: rgb(217 178 96 / 24%);
+  color: inherit;
+  border-radius: 1px;
+  box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.mg-native .mg-native-passage .cm-highlight {
+  background: transparent;
+}
+
+.mg-native .mg-native-passage.mg-engaged, .mg-reading mark.mg-reading-passage.mg-engaged {
+  background: rgb(217 178 96 / 42%);
+}
+
 /* Zero-height note anchors must escape Obsidian's widget paint containment. */
-.markdown-source-view.mod-cm6.mg-native .cm-content > .mg-native-note-widget { position: relative; height: 0; overflow: visible; contain: none !important; content-visibility: visible !important; user-select: none; }
-.mg-native-note-widget > .mg-note, .mg-native-note-widget > .mg-composer { position: absolute; left: calc(100% + 44px); width: 220px; top: 0; z-index: 3; }
-.mg-reading.mg-has-margins:not(.mg-reading-compact) .markdown-preview-sizer { position: relative; box-sizing: border-box; padding-right: var(--mg-margin-space) !important; }
-.mg-reading.mg-has-margins.is-readable-line-width:not(.mg-reading-compact) .markdown-preview-sizer { max-width: calc(var(--file-line-width, 700px) + var(--mg-margin-space)); }
-.mg-reading-rail { position: absolute; right: auto; top: 0; width: 220px; contain: none !important; content-visibility: visible !important; overflow: visible; }
-.mg-reading-rail > .mg-note, .mg-reading-rail > .mg-composer { width: 100%; }
-:is(.mg-native-selection, .mg-native-pen, .mg-reading-selection, .mg-reading-pen) { position: absolute; z-index: 12; }
-:is(.mg-native, .mg-reading) button:is(.mg-native-selection, .mg-reading-selection) { height: 32px; padding: 6px 10px; border: 1px solid var(--mg-line); border-radius: 5px; background: var(--mg-paper); box-shadow: 0 4px 16px #0002; }
+
+.markdown-source-view.mod-cm6.mg-native .cm-content > .mg-native-note-widget {
+  position: relative;
+  height: 0;
+  overflow: visible;
+  contain: none;
+  content-visibility: visible;
+  user-select: none;
+}
+
+.mg-native-note-widget > .mg-note, .mg-native-note-widget > .mg-composer {
+  position: absolute;
+  left: calc(100% + 44px);
+  width: 220px;
+  top: 0;
+  z-index: 3;
+}
+
+.markdown-preview-view.mg-reading.mg-has-margins:not(.mg-reading-compact) .markdown-preview-sizer {
+  position: relative;
+  box-sizing: border-box;
+  padding-right: var(--mg-margin-space);
+}
+
+.markdown-preview-view.mg-reading.mg-has-margins.is-readable-line-width:not(.mg-reading-compact) .markdown-preview-sizer {
+  max-width: calc(var(--file-line-width, 700px) + var(--mg-margin-space));
+}
+
+.markdown-preview-view.mg-reading > .mg-reading-rail {
+  position: absolute;
+  right: auto;
+  top: 0;
+  width: 220px;
+  contain: none;
+  content-visibility: visible;
+  overflow: visible;
+}
+
+.mg-reading-rail > .mg-note, .mg-reading-rail > .mg-composer {
+  width: 100%;
+}
+
+:is(.mg-native-selection, .mg-native-pen, .mg-reading-selection, .mg-reading-pen) {
+  position: absolute;
+  z-index: 12;
+}
+
+:is(.mg-native, .mg-reading) button:is(.mg-native-selection, .mg-reading-selection) {
+  height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--mg-line);
+  border-radius: 5px;
+  background: var(--mg-paper);
+  box-shadow: 0 4px 16px #0002;
+}
 
 /* Narrow panes keep the same note styling below the associated paragraph. */
-.markdown-source-view.mod-cm6.mg-native-compact .cm-content > .mg-native-note-widget { height: auto; padding: 0; }
-.mg-native-compact .mg-native-note-widget > .mg-note, .mg-native-compact .mg-native-note-widget > .mg-composer, .mg-reading-compact .mg-note, .mg-reading-compact .mg-composer { position: relative; left: auto; top: auto !important; width: auto; max-width: 420px; margin: 8px 0 22px 24px; padding: 0 0 0 14px; border-left: 1px solid var(--mg-line); }
-.mg-native-compact .mg-native-note-widget > .mg-composer, .mg-reading-compact .mg-composer { padding-top: 10px; padding-bottom: 10px; }
-.mg-reading-compact .mg-reading-rail { position: static; width: auto; }
-:is(.mg-native-compact, .mg-reading-compact) .mg-note .mg-edit-note { opacity: 1; }
-:is(.mg-native-compact, .mg-reading-compact) .mg-note-body { font-size: 13px; }
+
+.markdown-source-view.mod-cm6.mg-native-compact .cm-content > .mg-native-note-widget {
+  height: auto;
+  padding: 0;
+}
+
+.mg-native-compact .mg-native-note-widget > .mg-note, .mg-native-compact .mg-native-note-widget > .mg-composer, .mg-reading-compact .mg-note, .mg-reading-compact .mg-composer {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: auto;
+  max-width: 420px;
+  margin: 8px 0 22px 24px;
+  padding: 0 0 0 14px;
+  border-left: 1px solid var(--mg-line);
+}
+
+.mg-native-compact .mg-native-note-widget > .mg-composer, .mg-reading-compact .mg-composer {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.markdown-preview-view.mg-reading.mg-reading-compact > .mg-reading-rail {
+  position: static;
+  width: auto;
+}
+
+:is(.mg-native-compact, .mg-reading-compact) .mg-note .mg-edit-note {
+  opacity: 1;
+}
+
+:is(.mg-native-compact, .mg-reading-compact) .mg-note-body {
+  font-size: 13px;
+}
+
+/* Wide notes are siblings of the native editor content, outside its paint-contained widgets. */
+
+.mg-native .mg-native-rail {
+  position: absolute;
+  top: 0;
+  width: 220px;
+}
+
+.mg-native .mg-native-rail > .mg-note, .mg-native .mg-native-rail > .mg-composer {
+  position: absolute;
+  left: 0;
+  width: 100%;
+}

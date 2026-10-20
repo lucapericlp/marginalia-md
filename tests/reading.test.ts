@@ -51,3 +51,10 @@ test('plugin styles preserve theme-controlled article fonts, size, line spacing,
   }
   assert.equal(doc.getComputedStyle(doc.document.querySelector('.metadata-container')!).display, 'block');
 });
+
+test('hidden margin controls and managed footnotes stay hidden without important declarations', () => {
+  const css = readFileSync(new URL('../styles.css', import.meta.url), 'utf8');
+  const doc = new JSDOM(`<style>${css}</style><div class="mg-native"><button class="mg-control" hidden>Hidden action</button><button class="mg-control" id="visible">Visible action</button><aside class="mg-note" hidden>Hidden note</aside></div><div class="markdown-preview-view mg-reading"><sup class="mg-managed-footnote">1</sup><sup id="ordinary">2</sup></div>`).window;
+  for (const element of doc.document.querySelectorAll('[hidden],.mg-managed-footnote')) assert.equal(doc.getComputedStyle(element).display, 'none');
+  for (const id of ['visible', 'ordinary']) assert.notEqual(doc.getComputedStyle(doc.document.getElementById(id)!).display, 'none');
+});

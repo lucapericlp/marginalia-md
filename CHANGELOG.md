@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.3 — 2026-10-20
+
+- Make the default build match the production release byte for byte.
+- Add GitHub build-provenance attestations for all plugin assets.
+- Publish only Obsidian-supported release attachments; keep manual packages in workflow artifacts.
+- Remove CSS compatibility warnings and all important declarations.
+- Render wide editor margins outside paint-contained widgets while preserving compact layouts.
+- Add CSS compatibility and reproducible-build checks to CI.
+
 ## 0.3.2 — 2026-10-20
 
 - Rename the repository, plugin ID, release archive, and package to `marginalia-md`, with the display name **Marginalia MD**.

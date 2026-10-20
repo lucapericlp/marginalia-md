@@ -1,7 +1,7 @@
 {
   "id": "marginalia-md",
   "name": "Marginalia MD",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "minAppVersion": "1.14.4",
   "description": "Write paragraph and passage notes in the margin while reading or editing. Keep your annotations as readable Markdown footnotes.",
   "author": "Luca Peric",
