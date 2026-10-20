@@ -1,0 +1,10 @@
+{
+  "id": "marginalia",
+  "name": "Marginalia",
+  "version": "0.3.1",
+  "minAppVersion": "1.14.4",
+  "description": "Write paragraph and passage notes in the margin while reading or editing. Keep your annotations as readable Markdown footnotes.",
+  "author": "Luca Peric",
+  "isDesktopOnly": false,
+  "authorUrl": "https://github.com/lucapericlp"
+}

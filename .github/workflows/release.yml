@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    tags: ['[0-9]*.[0-9]*.[0-9]*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run package
+      - run: npm run check:release -- "$RELEASE_TAG"
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+      - run: git diff --exit-code THIRD_PARTY_NOTICES.md
+      - run: npm audit --omit=dev
+      - name: Publish Community Plugins assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          notes="docs/releases/$RELEASE_TAG.md"
+          if [ -f "$notes" ]; then
+            args=(--notes-file "$notes")
+          else
+            args=(--generate-notes)
+          fi
+          gh release create "$RELEASE_TAG" \
+            "dist/$RELEASE_TAG/main.js" \
+            "dist/$RELEASE_TAG/manifest.json" \
+            "dist/$RELEASE_TAG/styles.css" \
+            "dist/$RELEASE_TAG/LICENSE" \
+            "dist/$RELEASE_TAG/THIRD_PARTY_NOTICES.md" \
+            "dist/$RELEASE_TAG/marginalia-$RELEASE_TAG.zip" \
+            "dist/$RELEASE_TAG/SHA256SUMS.txt" \
+            --verify-tag --title "Marginalia $RELEASE_TAG" "${args[@]}"
