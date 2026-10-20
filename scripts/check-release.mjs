@@ -7,8 +7,8 @@ const pkg = await json('package.json');
 const versions = await json('versions.json');
 assert.match(manifest.id, /^[a-z]+(?:-[a-z]+)*$/);
 assert.ok(!manifest.id.includes('obsidian') && !manifest.id.endsWith('plugin'));
-assert.equal(manifest.id, 'marginalia');
-assert.equal(manifest.name, 'Marginalia');
+assert.equal(manifest.id, 'marginalia-md');
+assert.equal(manifest.name, 'Marginalia MD');
 assert.match(manifest.version, /^\d+\.\d+\.\d+$/);
 assert.match(manifest.minAppVersion, /^\d+\.\d+\.\d+$/);
 assert.equal(pkg.version, manifest.version, 'Package and manifest versions differ.');
@@ -26,4 +26,4 @@ assert.ok(source.includes('Third-party notices') && source.includes('MIT License
 // Parse without executing plugin code outside Obsidian.
 new Function('require', 'module', 'exports', source);
 for (const file of ['styles.css', 'README.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md']) assert.ok((await readFile(new URL(`../${file}`, import.meta.url), 'utf8')).trim());
-console.log(`Validated Marginalia ${manifest.version} for Obsidian ${manifest.minAppVersion}+. Release tag: ${manifest.version}.`);
+console.log(`Validated ${manifest.name} ${manifest.version} for Obsidian ${manifest.minAppVersion}+. Release tag: ${manifest.version}.`);

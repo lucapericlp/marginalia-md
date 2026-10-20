@@ -4,11 +4,11 @@ The repository and GitHub release are prepared for submission. This document doe
 
 | Field | Value |
 | --- | --- |
-| Repository URL | https://github.com/lucapericlp/marginalia |
-| Plugin ID | `marginalia` |
-| Name | Marginalia |
+| Repository URL | https://github.com/lucapericlp/marginalia-md |
+| Plugin ID | `marginalia-md` |
+| Name | Marginalia MD |
 | Author | Luca Peric |
-| Release tag | `0.3.1` (no `v` prefix) |
+| Release tag | `0.3.2` (no `v` prefix) |
 | Minimum Obsidian version | `1.14.4` |
 | License | MIT |
 
@@ -19,12 +19,12 @@ The release includes separate `main.js`, `manifest.json`, and `styles.css` attac
 Obsidian's current submission process uses its Community website. Follow the [official submission guide](https://docs.obsidian.md/Plugins/Releasing/Submit%20your%20plugin) and [account setup guide](https://docs.obsidian.md/community-directory/set-up-and-claim).
 
 1. Sign in at [community.obsidian.md](https://community.obsidian.md) with your Obsidian account.
-2. Connect your GitHub account so the directory can verify ownership of `lucapericlp/marginalia`.
+2. Connect your GitHub account so the directory can verify ownership of `lucapericlp/marginalia-md`.
 3. Open **Plugins → New plugin**, enter the repository URL above, and choose yourself as owner.
 4. Review the developer policies and maintenance commitment yourself, then submit.
 5. Check the automated manifest, release, source, and build reports. Address any feedback with a new version and release, then publish the listing when eligible.
 
-The account holder must agree to the policies and maintenance commitment. The release can be installed through BRAT or manually while the listing is pending. Avoid advertising an `obsidian://show-plugin?id=marginalia` installation link until the entry is actually listed.
+The account holder must agree to the policies and maintenance commitment. The release can be installed through BRAT or manually while the listing is pending. Avoid advertising an `obsidian://show-plugin?id=marginalia-md` installation link until the entry is actually listed.
 
 ## Preparation evidence
 

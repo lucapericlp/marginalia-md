@@ -105,7 +105,7 @@ class MarginaliaSettings extends PluginSettingTab {
   getSettingDefinitions(): SettingDefinitionItem[] {
     return [
       { name: 'Read and write', desc: 'Margin notes are available in every note, in both editing and reading view. The article keeps your theme’s typography and formatting. No tags or special view are needed.' },
-      { name: 'Write a margin note', desc: 'Select a passage or use the pencil beside a paragraph to write in its margin. You can also run Marginalia: Write in the margin; a Vim visual selection works in the editor. Save with ⌘/Ctrl + Enter and cancel with Escape.' },
+      { name: 'Write a margin note', desc: 'Select a passage or use the pencil beside a paragraph to write in its margin. You can also run Marginalia MD: Write in the margin; a Vim visual selection works in the editor. Save with ⌘/Ctrl + Enter and cancel with Escape.' },
       { name: 'Storage', desc: 'Annotations are ordinary Markdown footnotes stored in the note. Unsaved drafts are kept locally when you close a note or switch views.' },
     ];
   }

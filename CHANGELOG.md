@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2 — 2026-10-20
+
+- Rename the repository, plugin ID, release archive, and package to `marginalia-md`, with the display name **Marginalia MD**.
+- Update install links and Community Plugins submission details.
+- Preserve the Markdown annotation format and document upgrades from the old private plugin ID.
+
 ## 0.3.1 — 2026-10-20
 
 First public GitHub release, prepared for the Obsidian Community Plugins directory.

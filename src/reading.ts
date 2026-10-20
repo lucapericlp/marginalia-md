@@ -154,7 +154,7 @@ class ReadingMargins extends Component {
       }
       if (this.active && !this.draft && this.host.drafts[this.path]) this.open(this.host.drafts[this.path]!.anchor, this.host.drafts[this.path]);
       this.layoutSoon();
-    } catch (error) { console.error('Marginalia could not render the margin notes', error); }
+    } catch (error) { console.error('Marginalia MD could not render the margin notes', error); }
     finally { this.busy = false; if (this.again) { this.again = false; this.refreshSoon(); } }
   }
   private async renderNote(note: MarginNote, target: HTMLElement): Promise<void> {

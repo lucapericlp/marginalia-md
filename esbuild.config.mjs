@@ -19,6 +19,6 @@ const analysis = await build({ ...options, write: false, metafile: true });
 const notices = await bundledNotices(Object.keys(analysis.metafile.inputs));
 await writeFile('THIRD_PARTY_NOTICES.md', notices);
 const license = await readFile('LICENSE', 'utf8');
-const banner = '/*!\nMarginalia\n\n' + license.trim() + '\n\n' + notices.replaceAll('*/', '* /').trim() + '\n*/';
+const banner = '/*!\nMarginalia MD\n\n' + license.trim() + '\n\n' + notices.replaceAll('*/', '* /').trim() + '\n*/';
 await build({ ...options, banner: { js: banner } });
 if (production) await rm('main.js.map', { force: true });

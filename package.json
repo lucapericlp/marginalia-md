@@ -1,6 +1,6 @@
 {
-  "name": "obsidian-marginalia",
-  "version": "0.3.1",
+  "name": "marginalia-md",
+  "version": "0.3.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -41,12 +41,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lucapericlp/marginalia.git"
+    "url": "git+https://github.com/lucapericlp/marginalia-md.git"
   },
   "bugs": {
-    "url": "https://github.com/lucapericlp/marginalia/issues"
+    "url": "https://github.com/lucapericlp/marginalia-md/issues"
   },
-  "homepage": "https://github.com/lucapericlp/marginalia#readme",
+  "homepage": "https://github.com/lucapericlp/marginalia-md#readme",
   "engines": {
     "node": ">=22.13.0"
   },

@@ -37,6 +37,8 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
+          plugin_id=$(node -p 'require("./manifest.json").id')
+          plugin_name=$(node -p 'require("./manifest.json").name')
           notes="docs/releases/$RELEASE_TAG.md"
           if [ -f "$notes" ]; then
             args=(--notes-file "$notes")
@@ -49,6 +51,6 @@ jobs:
             "dist/$RELEASE_TAG/styles.css" \
             "dist/$RELEASE_TAG/LICENSE" \
             "dist/$RELEASE_TAG/THIRD_PARTY_NOTICES.md" \
-            "dist/$RELEASE_TAG/marginalia-$RELEASE_TAG.zip" \
+            "dist/$RELEASE_TAG/$plugin_id-$RELEASE_TAG.zip" \
             "dist/$RELEASE_TAG/SHA256SUMS.txt" \
-            --verify-tag --title "Marginalia $RELEASE_TAG" "${args[@]}"
+            --verify-tag --title "$plugin_name $RELEASE_TAG" "${args[@]}"

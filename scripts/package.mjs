@@ -20,10 +20,10 @@ for (const file of [...releaseFiles, ...documentation]) {
   const bytes = await readFile(join(root, file));
   await mkdir(dirname(join(destination, file)), { recursive: true });
   await copyFile(join(root, file), join(destination, file));
-  archive[`marginalia/${file}`] = [bytes, { mtime: new Date('1980-01-01T00:00:00Z') }];
+  archive[`${manifest.id}/${file}`] = [bytes, { mtime: new Date('1980-01-01T00:00:00Z') }];
   if (releaseFiles.includes(file)) hashes.push(`${createHash('sha256').update(bytes).digest('hex')}  ${file}`);
 }
-const filename = `marginalia-${manifest.version}.zip`;
+const filename = `${manifest.id}-${manifest.version}.zip`;
 const zip = zipSync(archive, { level: 9 });
 await writeFile(join(destination, filename), zip);
 hashes.push(`${createHash('sha256').update(zip).digest('hex')}  ${filename}`);
