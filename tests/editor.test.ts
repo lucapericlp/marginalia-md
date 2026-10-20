@@ -103,4 +103,3 @@ test('adding a margin note leaves the native cursor in unchanged article text', 
   assert.equal(updated.doc.toString(), after);
   assert.equal(updated.doc.sliceString(updated.selection.main.head, updated.selection.main.head + 5), 'being');
 });
-
