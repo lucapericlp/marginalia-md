@@ -8,7 +8,7 @@ The repository and GitHub release are prepared for submission. This document doe
 | Plugin ID | `marginalia-md` |
 | Name | Marginalia MD |
 | Author | Luca Peric |
-| Release tag | `0.3.3` (no `v` prefix) |
+| Release tag | `0.3.4` (no `v` prefix) |
 | Minimum Obsidian version | `1.14.4` |
 | License | MIT |
 

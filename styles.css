@@ -83,7 +83,6 @@
   font: italic 14px/1.62 var(--mg-serif);
   overflow-wrap: anywhere;
   user-select: text;
-  user-select: text;
 }
 
 :is(.mg-native, .mg-reading) .mg-note-body p {
@@ -238,7 +237,6 @@
   background: rgb(217 178 96 / 24%);
   color: inherit;
   border-radius: 1px;
-  box-decoration-break: clone;
   box-decoration-break: clone;
 }
 

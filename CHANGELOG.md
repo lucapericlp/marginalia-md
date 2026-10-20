@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.4 — 2026-10-20
+
+- Remove duplicate CSS declarations identified by the automated review.
+- Reject duplicate properties in the local CSS check.
+
 ## 0.3.3 — 2026-10-20
 
 - Make the default build match the production release byte for byte.
